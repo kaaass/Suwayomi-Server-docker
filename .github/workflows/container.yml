@@ -20,8 +20,8 @@ on:
         required: false
 
 env:
-  server_repo: ${{ inputs.tachidesk_release_type == 'stable' && 'Suwayomi-Server' || 'Suwayomi-Server-preview' }}
-  test_image_tag: ghcr.io/suwayomi/suwayomi-server-test:testing
+  server_repo: "Suwayomi-Server"
+  test_image_tag: ghcr.io/kaaass/suwayomi-server-test:testing
   this_actions_run_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 jobs:
@@ -51,7 +51,7 @@ jobs:
       - name: Get latest release metadata
         id: get_latest_release_metadata
         run: |
-          curl -s https://api.github.com/repos/suwayomi/${{ env.server_repo }}/releases/latest > ${{ runner.temp }}/latest_release.json
+          curl -s https://api.github.com/repos/kaaass/${{ env.server_repo }}/releases/latest > ${{ runner.temp }}/latest_release.json
           release_url=$(jq -r '.assets[] | select(.content_type == "application/java-archive") | .browser_download_url' ${{ runner.temp }}/latest_release.json)
           release_tag=$(jq -r '.tag_name' ${{ runner.temp }}/latest_release.json)
           release_filename=$(basename $release_url)
@@ -182,12 +182,12 @@ jobs:
             TACHIDESK_FILENAME=${{ steps.get_latest_release_metadata.outputs.release_filename }}
             TACHIDESK_DOCKER_GIT_COMMIT=${{ steps.get_latest_release_metadata.outputs.tachidesk_docker_git_commit }}
           tags: |
-            ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/tachidesk:latest' || '' }}
-            ghcr.io/suwayomi/tachidesk:${{ inputs.tachidesk_release_type }}
-            ghcr.io/suwayomi/tachidesk:${{ steps.get_latest_release_metadata.outputs.release_tag }}
-            ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/suwayomi-server:latest' || '' }}
-            ghcr.io/suwayomi/suwayomi-server:${{ inputs.tachidesk_release_type }}
-            ghcr.io/suwayomi/suwayomi-server:${{ steps.get_latest_release_metadata.outputs.release_tag }}
+            ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/kaaass/tachidesk:latest' || '' }}
+            ghcr.io/kaaass/tachidesk:${{ inputs.tachidesk_release_type }}
+            ghcr.io/kaaass/tachidesk:${{ steps.get_latest_release_metadata.outputs.release_tag }}
+            ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/kaaass/suwayomi-server:latest' || '' }}
+            ghcr.io/kaaass/suwayomi-server:${{ inputs.tachidesk_release_type }}
+            ghcr.io/kaaass/suwayomi-server:${{ steps.get_latest_release_metadata.outputs.release_tag }}
 
       # - name: Create slim container
       #   uses: kitabisa/docker-slim-action@v1
