@@ -20,7 +20,7 @@ on:
         required: false
 
 env:
-  server_repo: "Suwayomi-Server"
+  server_repo: ${{ inputs.tachidesk_release_type == 'stable' && 'Suwayomi-Server' || 'Suwayomi-Server-preview' }}
   test_image_tag: ghcr.io/kaaass/suwayomi-server-test:testing
   this_actions_run_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
